@@ -1,13 +1,31 @@
-# Zillow Home Value Estimator - Regression Project
+# Drivers of Error for Zillow 2017 Single Unit/Single Family Homes Zestimates - Clustering Model Project
 
-## Project Discription
+![]("https://images.app.goo.gl/8qCu58VJVbYNpvLa6")
+
+## Project Objectives
+> - Document code, process (data acquistion, preparation, exploratory data analysis and statistical testing, modeling, and model evaluation), findings, and key takeaways in a Jupyter Notebook report.
+> - Create a module (wrangle.py) that make your process repeateable.
+> - Construct a model to determine sources of estimate error using clustering techniques.
+> - Deliver a 5 minute presentation consisting of a high-level notebook walkthrough using your Jupyter Notebook from above; your presentation should be appropriate for your target audience.
+> - Answer panel questions about your code, process, findings and key takeaways, and model.
+
+## Project Description
+- To use unsupervised machine learning via clustering models to group similar data into a more useful form
 
 ### Project Goals
+- To find out what are driving the errors in the Zestimates?
+
+### Executive Summary
+- Key Findings
+- Recommendations
+- Next Steps
 
 ### Busines Goals
-- Construct an ML Regression model that predict property tax assessed values ('taxvaluedollarcnt') of Single Family Properties using attributes of the properties.
+- To construct a ML clustering model that allows us to determine the drivers of error for Zillow Zestimates using 'logerror'.
+- Document and present it a way that is clear and understandable
 
-- Find the key drivers of property value for single family properties. Some questions that come to mind are: Why do some properties have a much higher value than others when they are located so close to each other? Why are some properties valued so differently from others when they have nearly the same physical attributes but only differ in location? Is having 1 bathroom worse than having 2 bedrooms?
+- Find the key sources of error for estimating the value of single family properties. Some questions that come to mind are:
+
 
 - Deliver a report that the data science team can read through and replicate, understand what steps were taken, why and what the outcome was.
 
@@ -28,20 +46,13 @@
 ### Initial Hypotheses
 - **Hypothesis 1**
 - alpha = .05
-$H_0$: There is no significant difference in property tax assessed values for different lot sizes
-$H_a$: There is a significant difference in property tax assessed values for different lot sizes
-Outcome: I rejected the Null Hypothesis; there is a difference in the property tax assessed values for different lot sizes
+
 
 - **Hypothesis 2**
 - alpha = .05
-$H_0$: Having 1 bathroom is not worse than having 2 bedrooms
-$H_a$: Having 1 bathroom is significantly worse than having 2 bedrooms
-Outcome: I rejected the Null Hypothesis; there is a signifcant difference between 1 bathroom and 2 bedrooms
 
-### Executive Summary
-- Key Findings
-- Recommendations
-- Next Steps
+
+
 
 
 ## Project Reproduction
@@ -49,3 +60,4 @@ Outcome: I rejected the Null Hypothesis; there is a signifcant difference betwee
 [ ] User needs to have their own env.py file with 'user' for username, 'host', and 'password' formated like this (db, user, host, passwor) to access Codeup database 
 [ ] Download the wrangle.py file into working directory for acquire and prepare functions 
 [ ] Then run final_report jupyter notebook
+
