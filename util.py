@@ -20,7 +20,7 @@ def get_numbers(df):
         
 
 def percentage_dropper(df):
-    df = df.loc[:, df.isnull().mean() < .05]
+    df = df.loc[:, df.isnull().mean() < .02]
     return df
 
 def get_nan_cols(df, nan_percent=0.8):

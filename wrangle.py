@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 import pandas as pd
 import env
 import os
 from sklearn.model_selection import train_test_split
 
-
-# In[2]:
 
 
 def get_connection(db, user=env.user, host=env.host, password=env.password):
@@ -22,8 +18,6 @@ def get_connection(db, user=env.user, host=env.host, password=env.password):
 # Returns with correct address/password combinat to access the database
     return f'mysql+pymysql://{user}:{password}@{host}/{db}'
 
-
-# In[3]:
 
 
 def new_zillow_data():
@@ -44,8 +38,6 @@ def new_zillow_data():
 # Returns the called dataframe
     return df
 
-
-# In[4]:
 
 
 def get_zillow_data():
@@ -73,8 +65,6 @@ def get_zillow_data():
     return df
 
 
-# In[5]:
-
 
 def handle_nulls(df):
     '''
@@ -88,25 +78,42 @@ def handle_nulls(df):
     return df
 
 
-# In[6]:
-
 
 def float_to_int(df):
     '''
     Converts our fips, bedrooms, calculatedfinishedsquarefeet, lotsizesquarefeet, taxvaluedollarcnt, and yearbuilt from floats to integers
     '''
 # converts our fips, bedrooms, calculatedfinishedsquarefeet, taxvaluedollarcnt, and yearbuilt from floats to integers
+# Use pandas.to_datetime() to convert string to datetime format
     df["fips"] = df["fips"].astype(int)
     df["yearbuilt"] = df["yearbuilt"].astype(int)
     df["bedroomcnt"] = df["bedroomcnt"].astype(int)
     df["taxvaluedollarcnt"] = df["taxvaluedollarcnt"].astype(int)
     df["calculatedfinishedsquarefeet"] = df["calculatedfinishedsquarefeet"].astype(int)
     df["lotsizesquarefeet"] = df["lotsizesquarefeet"].astype(int)
+    df["regionidcity"] = df["regionidcity"].astype(int)
+    df["regionidzip"] = df["regionidzip"].astype(int)
+    df["structuretaxvaluedollarcnt"] = df["structuretaxvaluedollarcnt"].astype(int)
+    df["landtaxvaluedollarcnt"] = df["landtaxvaluedollarcnt"].astype(int)
+    df["censustractandblock"] = df["censustractandblock"].astype(int)
+    
+    return df
+
+def convert_date(df):
+    df["transactiondate"] = pd.to_datetime(df["transactiondate"])
     
     return df
 
 
-# In[7]:
+def drop_cols(df):
+    '''
+    Drops unnecessary columns mostly due to practically duplicate information
+    'propertylandusetypeid' and 'assessmentyear' since there's only 1 value, for single family
+    homes 'roomcnt' seems to be missing data which are represented by '0'
+    '''
+    cols_to_drop = ['propertylandusetypeid', 'id', 'id.1', 'calculatedbathnbr', 'fullbathcnt', 'finishedsquarefeet12', 'regionidcounty', 'roomcnt', 'assessmentyear', 'propertylandusedesc']
+    df = df.drop(columns=cols_to_drop, axis=1)
+    return df
 
 
 def clean_zillow(df):
@@ -114,15 +121,14 @@ def clean_zillow(df):
     Groups our functions used to clean up our data into a single function for ease of use
     '''
     df.drop_duplicates(inplace=True)
+    df = drop_cols(df)
     df = handle_nulls(df)
     df = float_to_int(df)
+    df = convert_date(df)
     df['county'] = df['fips'].astype(str)
-    df['county'] = df['county'].replace(['6037.0', '6059.0', '6111.0'], ['Los Angeles', 'Orange', 'Ventura'])
     
     return df
-
-
-# In[8]:
+#     df['county'] = df['county'].replace(['6037.0', '6059.0', '6111.0'], ['Los Angeles', 'Orange', 'Ventura'])
 
 
 def split_zillow(df):
@@ -148,7 +154,6 @@ def split_zillow(df):
     return train, validate, test
 
 
-# In[9]:
 
 
 def wrangle_zillow():
@@ -163,7 +168,6 @@ def wrangle_zillow():
     return train, validate, test
 
 
-# In[10]:
 
 
 def scale_zillow(train, validate, test,
@@ -193,8 +197,36 @@ def remove_columns(df, cols_to_remove):
     return df
 
 
-cols_to_drop = 'parcelid', 'id', 
+def get_upper_outliers(s, k):
+    '''
+    Given a series and a cutoff value, k, returns the upper outliers for the
+    series.
+
+    The values returned will be either 0 (if the point is not an outlier), or a
+    number that indicates how far away from the upper bound the observation is.
+    '''
+    q1, q3 = s.quantile([.25, .75])
+    iqr = q3 - q1
+    upper_bound = q3 + k * iqr
+    return s.apply(lambda x: max([x - upper_bound, 0]))
+
+def add_upper_outlier_columns(df, k):
+    '''
+    Add a column with the suffix _outliers for all the numeric columns
+    in the given dataframe.
+    '''
+
+    for col in df.select_dtypes('number'):
+        df[col + '_outliers'] = get_upper_outliers(df[col], k)
+
+    return df
 
 
-cols_to_convert = 'TBD' 
-
+bathroomcnt
+bedroomcnt
+calculatedfinishedsquarefeet
+lotsizesquarefeet
+structuretaxvaluedollarcnt_outliers
+taxvaluedollarcnt_outliers
+landtaxvaluedollarcnt_outliers
+taxamount_outliers
