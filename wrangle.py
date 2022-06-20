@@ -3,10 +3,10 @@
 
 
 import pandas as pd
+import sklearn
 import env
 import os
 from sklearn.model_selection import train_test_split
-
 
 
 def get_connection(db, user=env.user, host=env.host, password=env.password):
@@ -118,7 +118,7 @@ def drop_cols(df):
 
 def clean_zillow(df):
     '''
-    Groups our functions used to clean up our data into a single function for ease of use
+    Groups our functions used to clean up our data into a single function for ease of use.
     '''
     df.drop_duplicates(inplace=True)
     df = drop_cols(df)
@@ -171,9 +171,9 @@ def wrangle_zillow():
 
 
 def scale_zillow(train, validate, test,
-                 cols_to_scale = ['bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'lotsizesquarefeet', 'taxvaluedollarcnt']):
+                 cols_to_scale = ['logerror', 'bedroomcnt', 'bathroomcnt', 'calculatedfinishedsquarefeet', 'lotsizesquarefeet', 'structuretaxvaluedollarcnt', 'taxvaluedollarcnt', 'landtaxvaluedollarcnt', 'taxamount']):
     '''
-    Accepts train, validate, and test as inputs from split data then returns scaled versions for each one
+    Accepts train, validate, and test as inputs from split data then returns scaled versions for each one using Robust Scaler.
     '''
     train_scaled = train.copy()
     validate_scaled = validate.copy()
@@ -222,11 +222,15 @@ def add_upper_outlier_columns(df, k):
     return df
 
 
-bathroomcnt
-bedroomcnt
-calculatedfinishedsquarefeet
-lotsizesquarefeet
-structuretaxvaluedollarcnt_outliers
-taxvaluedollarcnt_outliers
-landtaxvaluedollarcnt_outliers
-taxamount_outliers
+def percentage_dropper(df):
+    df = df.loc[:, df.isnull().mean() < .02]
+    return df
+# bathroomcnt_outliers
+# bedroomcnt_outliers
+# calculatedfinishedsquarefeet_outliers
+# lotsizesquarefeet_outliers
+# structuretaxvaluedollarcnt_outliers
+# taxvaluedollarcnt_outliers
+# landtaxvaluedollarcnt_outliers
+# taxamount_outliers
+

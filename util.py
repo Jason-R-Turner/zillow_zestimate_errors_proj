@@ -19,12 +19,13 @@ def get_numbers(df):
         print("-----------------")
         
 
-def percentage_dropper(df):
-    df = df.loc[:, df.isnull().mean() < .02]
-    return df
-
 def get_nan_cols(df, nan_percent=0.8):
     threshold = len(df.index) * nan_percent
     return [c for c in df.columns if sum(df[c].isnull()) >= threshold]
 
 
+def summarize(df):
+    metrics(df)
+    get_numbers(df)
+    df.info
+    return

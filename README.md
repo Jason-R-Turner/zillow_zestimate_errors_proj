@@ -2,6 +2,8 @@
 
 ![]("https://images.app.goo.gl/8qCu58VJVbYNpvLa6")
 
+# Project Planning
+
 ## Project Objectives
 > - Document code, process (data acquistion, preparation, exploratory data analysis and statistical testing, modeling, and model evaluation), findings, and key takeaways in a Jupyter Notebook report.
 > - Create a module (wrangle.py) that make your process repeateable.
@@ -13,12 +15,15 @@
 - To use unsupervised machine learning via clustering models to group similar data into a more useful form
 
 ### Project Goals
-- To find out what are driving the errors in the Zestimates?
+- To find out what are driving errors in Zestimates
+ - 
+
 
 ### Executive Summary
 - Key Findings
 - Recommendations
 - Next Steps
+
 
 ### Busines Goals
 - To construct a ML clustering model that allows us to determine the drivers of error for Zillow Zestimates using 'logerror'.
